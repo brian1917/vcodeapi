@@ -2,25 +2,30 @@ package vcodeapi
 
 import (
 	"net/http"
-	"fmt"
 	"io/ioutil"
+	"log"
+	"errors"
 )
 
-func AppList(username, password string) []byte {
+func AppList(username, password string) ([]byte, error) {
+	var errorMsg error = nil
 
 	client := http.Client{}
 	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/getapplist.do", nil)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 	req.SetBasicAuth(username, password)
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-	return data
+	if resp.Status != "200 OK" {
+		errorMsg = errors.New("getapplist.do call error: " + resp.Status)
+	}
+	return data, errorMsg
 }
