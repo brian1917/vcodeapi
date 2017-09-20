@@ -18,12 +18,12 @@ import "github.com/brian1917/vcodeapi"
 
 ### FUNCTIONS
 
-func AppList(username, password string) ([]byte, error)
-func BuildList(username, password, app_id string) ([]byte, error)
-func GetAppList(username, password string) ([]App, error)
-func GetBuildList(username, password, app_id string) ([]string, error)
-func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomField, error)
-func SandboxList(username, password, appID string) ([]byte, error)
+func AppList(username, password string) ([]byte, error)</br>
+func BuildList(username, password, app_id string) ([]byte, error)</br>
+func GetAppList(username, password string) ([]App, error)</br>
+func GetBuildList(username, password, app_id string) ([]string, error)</br>
+func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomField, error)</br>
+func SandboxList(username, password, appID string) ([]byte, error)</br>
 
 ### TYPES
 
