@@ -16,7 +16,7 @@ func GetAppList(username, password string) ([]App, error) {
 	var apps []App
 	var errMsg error = nil
 
-	appListAPI, err := AppList(username, password)
+	appListAPI, err := appList(username, password)
 	if err!= nil{
 		log.Fatal(err)
 	}

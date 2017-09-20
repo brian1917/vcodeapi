@@ -7,7 +7,7 @@ import (
 	"errors"
 )
 
-func BuildList(username, password, app_id string) ([]byte, error) {
+func buildList(username, password, app_id string) ([]byte, error) {
 	var errorMsg error = nil
 
 	client := http.Client{}

@@ -15,7 +15,7 @@ func GetBuildList(username, password, app_id string) ([]string,error) {
 	var buildIDs []string
 	var errMsg error = nil
 
-	buildListAPI, err := BuildList(username, password, app_id)
+	buildListAPI, err := buildList(username, password, app_id)
 	if err!=nil{
 		log.Fatal(err)
 	}
