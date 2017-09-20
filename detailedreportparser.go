@@ -57,7 +57,7 @@ func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomF
 	var customFields []CustomField
 	var errMsg error = nil
 
-	detailedReportAPI, err := DetailedReport(username, password, build_id)
+	detailedReportAPI, err := detailedReport(username, password, build_id)
 	if err != nil {
 		log.Fatal(err)
 	}

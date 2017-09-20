@@ -7,7 +7,7 @@ import (
 	"errors"
 )
 
-func DetailedReport(username, password, build_id string) ([]byte, error) {
+func detailedReport(username, password, build_id string) ([]byte, error) {
 	var errorMsg error = nil
 
 	client := http.Client{}
