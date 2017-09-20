@@ -11,3 +11,4 @@ XML response and returns usable objects such as flaws.
 3. getdetailedreport.do
 
 ## PACKAGE DOCUMENTATION
+See here: https://godoc.org/github.com/brian1917/vcodeapi
