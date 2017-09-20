@@ -12,7 +12,7 @@ XML response and returns usable objects such as flaws.
 
 ## PACKAGE DOCUMENTATION
 
-package vcodeapi
+package vcodeapi </br>
 import "github.com/brian1917/vcodeapi"
 
 
