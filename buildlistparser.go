@@ -11,7 +11,7 @@ type Build struct {
 	BuildID string `xml:"build_id,attr"`
 }
 
-func GetBuildList(username, password, app_id string) ([]string,error) {
+func ParseBuildList(username, password, app_id string) ([]string,error) {
 	var buildIDs []string
 	var errMsg error = nil
 

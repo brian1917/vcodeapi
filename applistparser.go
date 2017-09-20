@@ -12,7 +12,7 @@ type App struct {
 	AppName string `xml:"app_name,attr"`
 }
 
-func GetAppList(username, password string) ([]App, error) {
+func ParseAppList(username, password string) ([]App, error) {
 	var apps []App
 	var errMsg error = nil
 
