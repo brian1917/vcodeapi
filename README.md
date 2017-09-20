@@ -9,7 +9,7 @@ For example, `detailedreport.go` calls the Veracode API and returns a `[byte]` a
 XML response and returns usable objects such as flaws.
 
 ## Included APIs
-1. getapplist.do (/api/5.0/getapplist.do)
-2. getbuildlist.do (/api/5.0/getbuildlist.do)
-3. getdetailedreport.do (/api/5.0/detailedreport.do)
-4. getsandboxlist.do (/api/5.0/getsandboxlist.do)
+1. getapplist.do (`/api/5.0/getapplist.do`)
+2. getbuildlist.do (`/api/5.0/getbuildlist.do`)
+3. getdetailedreport.do (`/api/5.0/detailedreport.do`)
+4. getsandboxlist.do (`/api/5.0/getsandboxlist.do`)
