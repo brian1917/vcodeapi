@@ -27,57 +27,57 @@ func SandboxList(username, password, appID string) ([]byte, error)</br>
 
 ### TYPES
 
-type Annotation struct {
-    Action      string `xml:"action,attr"`
-    Description string `xml:"description,attr"`
-    User        string `xml:"user,attr"`
-    Date        string `xml:"date,attr"`
+type Annotation struct {</br>
+    Action      string `xml:"action,attr"`</br>
+    Description string `xml:"description,attr"`</br>
+    User        string `xml:"user,attr"`</br>
+    Date        string `xml:"date,attr"`</br>
 }
 
-type Annotations struct {
-    Annotation Annotation `xml:"annotation"`
+type Annotations struct {</br>
+    Annotation Annotation `xml:"annotation"`</br>
 }
 
-type App struct {
-    AppID   string `xml:"app_id,attr"`
-    AppName string `xml:"app_name,attr"`
+type App struct {</br>
+    AppID   string `xml:"app_id,attr"`</br>
+    AppName string `xml:"app_name,attr"`</br>
 }
 
-type Build struct {
-    BuildID string `xml:"build_id,attr"`
+type Build struct {</br>
+    BuildID string `xml:"build_id,attr"`</br>
 }
 
-type CustomField struct {
-    Name  string `xml:"name,attr"`
-    Value string `xml:"value,attr"`
+type CustomField struct {</br>
+    Name  string `xml:"name,attr"`</br>
+    Value string `xml:"value,attr"`</br>
 }
 
-type Flaw struct {
-    Issueid                   string      `xml:"issueid,attr"`
-    CategoryName              string      `xml:"categoryname,attr"`
-    Cweid                     string      `xml:"cweid,attr"`
-    Remediation_status        string      `xml:"remediation_status,attr"`
-    Mitigation_status         string      `xml:"mitigation_status,attr"`
-    Affects_policy_compliance string      `xml:"affects_policy_compliance,attr"`
-    Date_first_occurrence     string      `xml:"date_first_occurrence,attr"`
-    Severity                  string      `xml:"severity,attr"`
-    ExploitLevel              string      `xml:"exploitLevel,attr"`
-    Module                    string      `xml:"module,attr"`
-    Sourcefile                string      `xml:"sourcefile,attr"`
-    Line                      string      `xml:"line,attr"`
-    Description               string      `xml:"description,attr"`
-    Mitigations               Mitigations `xml:"mitigations"`
-    Annotations               Annotations `xml:"annotations"`
+type Flaw struct {</br>
+    Issueid                   string      `xml:"issueid,attr"`</br>
+    CategoryName              string      `xml:"categoryname,attr"`</br>
+    Cweid                     string      `xml:"cweid,attr"`</br>
+    Remediation_status        string      `xml:"remediation_status,attr"`</br>
+    Mitigation_status         string      `xml:"mitigation_status,attr"`</br>
+    Affects_policy_compliance string      `xml:"affects_policy_compliance,attr"`</br>
+    Date_first_occurrence     string      `xml:"date_first_occurrence,attr"`</br>
+    Severity                  string      `xml:"severity,attr"`</br>
+    ExploitLevel              string      `xml:"exploitLevel,attr"`</br>
+    Module                    string      `xml:"module,attr"`</br>
+    Sourcefile                string      `xml:"sourcefile,attr"`</br>
+    Line                      string      `xml:"line,attr"`</br>
+    Description               string      `xml:"description,attr"`</br>
+    Mitigations               Mitigations `xml:"mitigations"`</br>
+    Annotations               Annotations `xml:"annotations"`</br>
 }
 
-type Mitigation struct {
-    Action      string `xml:"action,attr"`
-    Description string `xml:"description,attr"`
-    User        string `xml:"user,attr"`
-    Date        string `xml:"date,attr"`
+type Mitigation struct {</br>
+    Action      string `xml:"action,attr"`</br>
+    Description string `xml:"description,attr"`</br>
+    User        string `xml:"user,attr"`</br>
+    Date        string `xml:"date,attr"`</br>
 }
 
-type Mitigations struct {
-    Mitigation Mitigation `xml:"mitigation"`
+type Mitigations struct {</br>
+    Mitigation Mitigation `xml:"mitigation"`</br>
 }
 
