@@ -9,10 +9,12 @@ import (
 
 type Build struct {
 	BuildID string `xml:"build_id,attr"`
+	Version string `xml:"version,attr"`
+	PolicyUpdatedDate string `xml:"policy_updated_date,attr"`
 }
 
-func ParseBuildList(username, password, app_id string) ([]string,error) {
-	var buildIDs []string
+func ParseBuildList(username, password, app_id string) ([]Build,error) {
+	var builds []Build
 	var errMsg error = nil
 
 	buildListAPI, err := buildList(username, password, app_id)
@@ -34,12 +36,12 @@ func ParseBuildList(username, password, app_id string) ([]string,error) {
 			if se.Name.Local == "build" {
 				var build Build
 				decoder.DecodeElement(&build, &se)
-				buildIDs = append(buildIDs, build.BuildID)
+				builds = append(builds, build)
 			}
 			if se.Name.Local == "error" {
 				errMsg = errors.New("api for GetBuildList returned with an error element")
 			}
 		}
 	}
-	return buildIDs, errMsg
+	return builds, errMsg
 }
