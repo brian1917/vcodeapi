@@ -8,8 +8,10 @@ import (
 )
 
 type Flaw struct {
-	Issueid                   string      `xml:"issueid,attr"`
-	CategoryName              string      `xml:"categoryname,attr"`
+	Issueid                   string `xml:"issueid,attr"`
+	CweName                   string `xml:"categoryname,attr"`
+	CategoryID                string `xml:"categoryid,attr"`
+	CategoryName              string
 	Cweid                     string      `xml:"cweid,attr"`
 	Remediation_status        string      `xml:"remediation_status,attr"`
 	Mitigation_status         string      `xml:"mitigation_status,attr"`
@@ -79,6 +81,7 @@ func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomF
 			if se.Name.Local == "flaw" {
 				var flaw Flaw
 				decoder.DecodeElement(&flaw, &se)
+				flaw.CategoryName = categoryMap[flaw.CategoryID]
 				flaws = append(flaws, flaw)
 			}
 			if se.Name.Local == "customfield" {
