@@ -1,24 +1,24 @@
 package vcodeapi
 
 import (
-	"log"
-	"encoding/xml"
 	"bytes"
+	"encoding/xml"
 	"errors"
+	"log"
 )
 
 type Build struct {
-	BuildID string `xml:"build_id,attr"`
-	Version string `xml:"version,attr"`
+	BuildID           string `xml:"build_id,attr"`
+	Version           string `xml:"version,attr"`
 	PolicyUpdatedDate string `xml:"policy_updated_date,attr"`
 }
 
-func ParseBuildList(username, password, app_id string) ([]Build,error) {
+func ParseBuildList(username, password, app_id string) ([]Build, error) {
 	var builds []Build
 	var errMsg error = nil
 
 	buildListAPI, err := buildList(username, password, app_id)
-	if err!=nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(buildListAPI))

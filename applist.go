@@ -1,10 +1,10 @@
 package vcodeapi
 
 import (
-	"net/http"
+	"errors"
 	"io/ioutil"
 	"log"
-	"errors"
+	"net/http"
 )
 
 func appList(username, password string) ([]byte, error) {

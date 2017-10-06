@@ -1,17 +1,17 @@
 package vcodeapi
 
 import (
-	"log"
-	"encoding/xml"
 	"bytes"
+	"encoding/xml"
 	"errors"
+	"log"
 )
 
-func ParseUpdateMitigation(username, password, buildID, action, comment, flawList string) (error) {
+func ParseUpdateMitigation(username, password, buildID, action, comment, flawList string) error {
 	var errMsg error = nil
 
 	updateMitigationApi, err := updateMitigationInfo(username, password, buildID, action, comment, flawList)
-	if err!= nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(updateMitigationApi))

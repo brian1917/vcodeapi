@@ -12,19 +12,19 @@ type Flaw struct {
 	CweName                   string `xml:"categoryname,attr"`
 	CategoryID                string `xml:"categoryid,attr"`
 	CategoryName              string
-	Cweid                     string        `xml:"cweid,attr"`
-	Remediation_status        string        `xml:"remediation_status,attr"`
-	Mitigation_status         string        `xml:"mitigation_status,attr"`
-	Affects_policy_compliance string        `xml:"affects_policy_compliance,attr"`
-	Date_first_occurrence     string        `xml:"date_first_occurrence,attr"`
-	Severity                  string        `xml:"severity,attr"`
-	ExploitLevel              string        `xml:"exploitLevel,attr"`
-	Module                    string        `xml:"module,attr"`
-	Sourcefile                string        `xml:"sourcefile,attr"`
-	Line                      string        `xml:"line,attr"`
-	Description               string        `xml:"description,attr"`
+	Cweid                     string      `xml:"cweid,attr"`
+	Remediation_status        string      `xml:"remediation_status,attr"`
+	Mitigation_status         string      `xml:"mitigation_status,attr"`
+	Affects_policy_compliance string      `xml:"affects_policy_compliance,attr"`
+	Date_first_occurrence     string      `xml:"date_first_occurrence,attr"`
+	Severity                  string      `xml:"severity,attr"`
+	ExploitLevel              string      `xml:"exploitLevel,attr"`
+	Module                    string      `xml:"module,attr"`
+	Sourcefile                string      `xml:"sourcefile,attr"`
+	Line                      string      `xml:"line,attr"`
+	Description               string      `xml:"description,attr"`
 	Mitigations               Mitigations `xml:"mitigations"`
-	Annotations               Annotations   `xml:"annotations"`
+	Annotations               Annotations `xml:"annotations"`
 }
 
 type Mitigations struct {

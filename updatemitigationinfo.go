@@ -1,12 +1,12 @@
 package vcodeapi
 
 import (
-	"net/http"
-	"io/ioutil"
 	"errors"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"net/url"
 	"strings"
-	"log"
 )
 
 func updateMitigationInfo(username, password, buildID, action, comment, flawList string) ([]byte, error) {

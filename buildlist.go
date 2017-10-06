@@ -1,10 +1,10 @@
 package vcodeapi
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"errors"
 )
 
 func buildList(username, password, app_id string) ([]byte, error) {

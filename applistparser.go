@@ -17,7 +17,7 @@ func ParseAppList(username, password string) ([]App, error) {
 	var errMsg error = nil
 
 	appListAPI, err := appList(username, password)
-	if err!= nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(appListAPI))

@@ -1,10 +1,10 @@
 package vcodeapi
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"errors"
 )
 
 func detailedReport(username, password, build_id string) ([]byte, error) {
