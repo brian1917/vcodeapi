@@ -7,11 +7,13 @@ import (
 	"log"
 )
 
+// App represents a Veracode Application Profile
 type App struct {
 	AppID   string `xml:"app_id,attr"`
 	AppName string `xml:"app_name,attr"`
 }
 
+// ParseAppList calls the Veracode getapplist.do API and returns an array of Apps
 func ParseAppList(username, password string) ([]App, error) {
 	var apps []App
 	var errMsg error = nil
