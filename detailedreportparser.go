@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+// Flaw represents a finding from a Veracode test (static, dynamic, or MPT)
 type Flaw struct {
 	Issueid                   string `xml:"issueid,attr"`
 	CweName                   string `xml:"categoryname,attr"`
@@ -27,10 +28,12 @@ type Flaw struct {
 	Annotations               Annotations `xml:"annotations"`
 }
 
+// Mitigations are an array individual mitigations
 type Mitigations struct {
 	Mitigation []Mitigation `xml:"mitigation"`
 }
 
+// An individual mitigation for a Flaw.
 type Mitigation struct {
 	Action      string `xml:"action,attr"`
 	Description string `xml:"description,attr"`
@@ -38,10 +41,12 @@ type Mitigation struct {
 	Date        string `xml:"date,attr"`
 }
 
+// An array of comments for a flaw (separate from mitigations comments)
 type Annotations struct {
 	Annotation []Annotation `xml:"annotation"`
 }
 
+// An individual comment for a flaw (separate from mitigation comment)
 type Annotation struct {
 	Action      string `xml:"action,attr"`
 	Description string `xml:"description,attr"`
@@ -49,11 +54,13 @@ type Annotation struct {
 	Date        string `xml:"date,attr"`
 }
 
+// Custom fields for an application profile (extracted from detailed report API
 type CustomField struct {
 	Name  string `xml:"name,attr"`
 	Value string `xml:"value,attr"`
 }
 
+// ParseDetailedReport parses the detailedreport.do API and returns an array of Flaws
 func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomField, error) {
 	var flaws []Flaw
 	var customFields []CustomField

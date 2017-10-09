@@ -7,12 +7,14 @@ import (
 	"log"
 )
 
+// A Build represents a Veracode Build within an application.
 type Build struct {
 	BuildID           string `xml:"build_id,attr"`
 	Version           string `xml:"version,attr"`
 	PolicyUpdatedDate string `xml:"policy_updated_date,attr"`
 }
 
+// ParseBuildList calls the Veracode getbuildlist.do API and returns an array of Builds
 func ParseBuildList(username, password, app_id string) ([]Build, error) {
 	var builds []Build
 	var errMsg error = nil
