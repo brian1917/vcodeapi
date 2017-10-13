@@ -14,12 +14,6 @@ func updateMitigationInfo(username, password, buildID, action, comment, flawList
 	var errorMsg error = nil
 
 	client := http.Client{}
-	fmt.Println(username)
-	fmt.Println(password)
-	fmt.Println(buildID)
-	fmt.Println(action)
-	fmt.Println(comment)
-	fmt.Println(flawList)
 
 	form := url.Values{}
 	form.Add("build_id", buildID)

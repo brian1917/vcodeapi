@@ -7,16 +7,27 @@ import (
 	"log"
 )
 
+type DetReport struct {
+	AppName                string `xml:"app_name,attr"`
+	AppID                  string `xml:"app_id,attr"`
+	PolicyName             string `xml:"policy_name,attr"`
+	PolicyComplianceStatus string `xml:"policy_compliance_status,attr"`
+	PolicyRulesStatus      string `xml:"policy_rules_status,attr"`
+	GracePeriodExpired     string `xml:"grace_period_expired,attr"`
+	BusinessUnit           string `xml:"business_unit,attr"`
+}
+
 // Flaw represents a finding from a Veracode test (static, dynamic, or MPT)
 type Flaw struct {
 	Issueid                   string `xml:"issueid,attr"`
 	CweName                   string `xml:"categoryname,attr"`
 	CategoryID                string `xml:"categoryid,attr"`
 	CategoryName              string
-	Cweid                     string      `xml:"cweid,attr"`
-	Remediation_status        string      `xml:"remediation_status,attr"`
-	Mitigation_status         string      `xml:"mitigation_status,attr"`
-	Affects_policy_compliance string      `xml:"affects_policy_compliance,attr"`
+	Cweid                     string `xml:"cweid,attr"`
+	Remediation_status        string `xml:"remediation_status,attr"`
+	Mitigation_status         string `xml:"mitigation_status,attr"`
+	Affects_policy_compliance string `xml:"affects_policy_compliance,attr"`
+	PolicyName                string
 	Date_first_occurrence     string      `xml:"date_first_occurrence,attr"`
 	Severity                  string      `xml:"severity,attr"`
 	ExploitLevel              string      `xml:"exploitLevel,attr"`
@@ -65,15 +76,38 @@ func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomF
 	var flaws []Flaw
 	var customFields []CustomField
 	var errMsg error = nil
+	var detRep DetReport
 
 	detailedReportAPI, err := detailedReport(username, password, build_id)
 	if err != nil {
 		log.Fatal(err)
 	}
-	decoder := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
+
+	// Two decoders sucks. We are decoding the entire document in decoder1 and just not using it. Circle back to this.
+
+	//decoder1 gets information on the app
+	decoder1 := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
 	for {
 		// Read tokens from the XML document in a stream.
-		t, _ := decoder.Token()
+		t, _ := decoder1.Token()
+
+		if t == nil {
+			break
+		}
+		// Inspect the type of the token just read
+		switch se := t.(type) {
+		case xml.StartElement:
+			if se.Name.Local == "detailedreport" {
+				decoder1.DecodeElement(&detRep, &se)
+			}
+		}
+	}
+
+	//decoder 2 gets information on flaws and custom fields.
+	decoder2 := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
+	for {
+		// Read tokens from the XML document in a stream.
+		t, _ := decoder2.Token()
 
 		if t == nil {
 			break
@@ -87,13 +121,14 @@ func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomF
 			}
 			if se.Name.Local == "flaw" {
 				var flaw Flaw
-				decoder.DecodeElement(&flaw, &se)
+				decoder2.DecodeElement(&flaw, &se)
 				flaw.CategoryName = categoryMap[flaw.CategoryID]
+				flaw.PolicyName = detRep.PolicyName
 				flaws = append(flaws, flaw)
 			}
 			if se.Name.Local == "customfield" {
 				var cField CustomField
-				decoder.DecodeElement(&cField, &se)
+				decoder2.DecodeElement(&cField, &se)
 				customFields = append(customFields, cField)
 			}
 		}
