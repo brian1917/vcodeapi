@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"fmt"
 )
 
 func updateMitigationInfo(username, password, buildID, action, comment, flawList string) ([]byte, error) {
