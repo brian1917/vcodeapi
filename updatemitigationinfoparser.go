@@ -7,14 +7,15 @@ import (
 	"log"
 )
 
+// ParseUpdateMitigation process an update mitigation request and returns an error if applicable
 func ParseUpdateMitigation(username, password, buildID, action, comment, flawList string) error {
-	var errMsg error = nil
+	var errMsg error
 
-	updateMitigationApi, err := updateMitigationInfo(username, password, buildID, action, comment, flawList)
+	updateMitigationAPI, err := updateMitigationInfo(username, password, buildID, action, comment, flawList)
 	if err != nil {
 		log.Fatal(err)
 	}
-	decoder := xml.NewDecoder(bytes.NewReader(updateMitigationApi))
+	decoder := xml.NewDecoder(bytes.NewReader(updateMitigationAPI))
 	for {
 		// Read tokens from the XML document in a stream.
 		t, _ := decoder.Token()

@@ -8,7 +8,7 @@ import (
 )
 
 func sandboxList(username, password, appID string) ([]byte, error) {
-	var errorMsg error = nil
+	var errorMsg error
 
 	client := http.Client{}
 	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/getsandboxlist.do?app_id="+appID, nil)

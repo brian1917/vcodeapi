@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-func buildList(username, password, app_id string) ([]byte, error) {
-	var errorMsg error = nil
+func buildList(username, password, appID string) ([]byte, error) {
+	var errorMsg error
 
 	client := http.Client{}
-	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/getbuildlist.do?app_id="+app_id, nil)
+	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/getbuildlist.do?app_id="+appID, nil)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 func appList(username, password string) ([]byte, error) {
-	var errorMsg error = nil
+	var errorMsg error
 
 	client := http.Client{}
 	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/getapplist.do", nil)

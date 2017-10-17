@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-func detailedReport(username, password, build_id string) ([]byte, error) {
-	var errorMsg error = nil
+func detailedReport(username, password, buildID string) ([]byte, error) {
+	var errorMsg error
 
 	client := http.Client{}
-	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/detailedreport.do?build_id="+build_id, nil)
+	req, err := http.NewRequest("GET", "https://analysiscenter.veracode.com/api/5.0/detailedreport.do?build_id="+buildID, nil)
 	if err != nil {
 		fmt.Println(err)
 	}

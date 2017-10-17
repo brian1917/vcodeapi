@@ -15,11 +15,11 @@ type Build struct {
 }
 
 // ParseBuildList calls the Veracode getbuildlist.do API and returns an array of Builds
-func ParseBuildList(username, password, app_id string) ([]Build, error) {
+func ParseBuildList(username, password, appID string) ([]Build, error) {
 	var builds []Build
-	var errMsg error = nil
+	var errMsg error
 
-	buildListAPI, err := buildList(username, password, app_id)
+	buildListAPI, err := buildList(username, password, appID)
 	if err != nil {
 		log.Fatal(err)
 	}

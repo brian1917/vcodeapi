@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-type DetReport struct {
+type detReport struct {
 	AppName                string `xml:"app_name,attr"`
 	AppID                  string `xml:"app_id,attr"`
 	PolicyName             string `xml:"policy_name,attr"`
@@ -19,24 +19,24 @@ type DetReport struct {
 
 // Flaw represents a finding from a Veracode test (static, dynamic, or MPT)
 type Flaw struct {
-	Issueid                   string `xml:"issueid,attr"`
-	CweName                   string `xml:"categoryname,attr"`
-	CategoryID                string `xml:"categoryid,attr"`
-	CategoryName              string
-	Cweid                     string `xml:"cweid,attr"`
-	Remediation_status        string `xml:"remediation_status,attr"`
-	Mitigation_status         string `xml:"mitigation_status,attr"`
-	Affects_policy_compliance string `xml:"affects_policy_compliance,attr"`
-	PolicyName                string
-	Date_first_occurrence     string      `xml:"date_first_occurrence,attr"`
-	Severity                  string      `xml:"severity,attr"`
-	ExploitLevel              string      `xml:"exploitLevel,attr"`
-	Module                    string      `xml:"module,attr"`
-	Sourcefile                string      `xml:"sourcefile,attr"`
-	Line                      string      `xml:"line,attr"`
-	Description               string      `xml:"description,attr"`
-	Mitigations               Mitigations `xml:"mitigations"`
-	Annotations               Annotations `xml:"annotations"`
+	Issueid                 string `xml:"issueid,attr"`
+	CweName                 string `xml:"categoryname,attr"`
+	CategoryID              string `xml:"categoryid,attr"`
+	CategoryName            string
+	Cweid                   string `xml:"cweid,attr"`
+	RemediationStatus       string `xml:"remediation_status,attr"`
+	MitigationStatus        string `xml:"mitigation_status,attr"`
+	AffectsPolicyCompliance string `xml:"affects_policy_compliance,attr"`
+	PolicyName              string
+	DateFirstOccurrence     string      `xml:"date_first_occurrence,attr"`
+	Severity                string      `xml:"severity,attr"`
+	ExploitLevel            string      `xml:"exploitLevel,attr"`
+	Module                  string      `xml:"module,attr"`
+	Sourcefile              string      `xml:"sourcefile,attr"`
+	Line                    string      `xml:"line,attr"`
+	Description             string      `xml:"description,attr"`
+	Mitigations             Mitigations `xml:"mitigations"`
+	Annotations             Annotations `xml:"annotations"`
 }
 
 // Mitigations are an array individual mitigations
@@ -44,7 +44,7 @@ type Mitigations struct {
 	Mitigation []Mitigation `xml:"mitigation"`
 }
 
-// An individual mitigation for a Flaw.
+// Mitigation is an individual documentation of a compensating control or reason a policy-violating flaw will not be addressed.
 type Mitigation struct {
 	Action      string `xml:"action,attr"`
 	Description string `xml:"description,attr"`
@@ -52,12 +52,12 @@ type Mitigation struct {
 	Date        string `xml:"date,attr"`
 }
 
-// An array of comments for a flaw (separate from mitigations comments)
+// Annotations are an array of individual annotations (comments)
 type Annotations struct {
 	Annotation []Annotation `xml:"annotation"`
 }
 
-// An individual comment for a flaw (separate from mitigation comment)
+// Annotation is a comment on a flaw (separate from comments attached to mitigation actions)
 type Annotation struct {
 	Action      string `xml:"action,attr"`
 	Description string `xml:"description,attr"`
@@ -65,20 +65,20 @@ type Annotation struct {
 	Date        string `xml:"date,attr"`
 }
 
-// Custom fields for an application profile (extracted from detailed report API
+// CustomField is metadata for an application profile (extracted from detailed report API)
 type CustomField struct {
 	Name  string `xml:"name,attr"`
 	Value string `xml:"value,attr"`
 }
 
 // ParseDetailedReport parses the detailedreport.do API and returns an array of Flaws
-func ParseDetailedReport(username, password, build_id string) ([]Flaw, []CustomField, error) {
+func ParseDetailedReport(username, password, buildID string) ([]Flaw, []CustomField, error) {
 	var flaws []Flaw
 	var customFields []CustomField
-	var errMsg error = nil
-	var detRep DetReport
+	var errMsg error
+	var detRep detReport
 
-	detailedReportAPI, err := detailedReport(username, password, build_id)
+	detailedReportAPI, err := detailedReport(username, password, buildID)
 	if err != nil {
 		log.Fatal(err)
 	}

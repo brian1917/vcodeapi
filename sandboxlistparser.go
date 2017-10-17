@@ -7,17 +7,19 @@ import (
 	"log"
 )
 
+// Sandbox is a an individual sandbox with an application profile
 type Sandbox struct {
 	SandboxID   string `xml:"sandbox_id,attr"`
 	SandboxName string `xml:"sandbox_name,attr"`
 	Owner       string `xml:"owner,attr"`
 }
 
-func ParseSandboxList(username, password, app_id string) ([]Sandbox, error) {
+// ParseSandboxList parses the getsandboxlist.do API and returns an array of Sandboxes
+func ParseSandboxList(username, password, appID string) ([]Sandbox, error) {
 	var sandboxes []Sandbox
-	var errMsg error = nil
+	var errMsg error
 
-	sandboxListAPI, err := sandboxList(username, password, app_id)
+	sandboxListAPI, err := sandboxList(username, password, appID)
 	if err != nil {
 		log.Fatal(err)
 	}

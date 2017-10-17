@@ -10,7 +10,7 @@ import (
 )
 
 func updateMitigationInfo(username, password, buildID, action, comment, flawList string) ([]byte, error) {
-	var errorMsg error = nil
+	var errorMsg error
 
 	client := http.Client{}
 
