@@ -7,9 +7,11 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/brian1917/vcodeHMAC"
 )
 
-func updateMitigationInfo(username, password, buildID, action, comment, flawList string) ([]byte, error) {
+func updateMitigationInfo(credsFile, buildID, action, comment, flawList string) ([]byte, error) {
 	var errorMsg error
 
 	client := http.Client{}
@@ -26,7 +28,7 @@ func updateMitigationInfo(username, password, buildID, action, comment, flawList
 		log.Fatal(err)
 	}
 
-	req.SetBasicAuth(username, password)
+	req.Header.Set("Authorization", vcodeHMAC.GenerateAuthHeader(credsFile, req.Method, req.URL.String()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
