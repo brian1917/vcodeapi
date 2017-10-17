@@ -8,10 +8,10 @@ import (
 )
 
 // ParseUpdateMitigation process an update mitigation request and returns an error if applicable
-func ParseUpdateMitigation(username, password, buildID, action, comment, flawList string) error {
+func ParseUpdateMitigation(credsFile, buildID, action, comment, flawList string) error {
 	var errMsg error
 
-	updateMitigationAPI, err := updateMitigationInfo(username, password, buildID, action, comment, flawList)
+	updateMitigationAPI, err := updateMitigationInfo(credsFile, buildID, action, comment, flawList)
 	if err != nil {
 		log.Fatal(err)
 	}

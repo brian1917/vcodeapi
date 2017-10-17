@@ -72,13 +72,13 @@ type CustomField struct {
 }
 
 // ParseDetailedReport parses the detailedreport.do API and returns an array of Flaws
-func ParseDetailedReport(username, password, buildID string) ([]Flaw, []CustomField, error) {
+func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, error) {
 	var flaws []Flaw
 	var customFields []CustomField
 	var errMsg error
 	var detRep detReport
 
-	detailedReportAPI, err := detailedReport(username, password, buildID)
+	detailedReportAPI, err := detailedReport(credsFile, buildID)
 	if err != nil {
 		log.Fatal(err)
 	}
