@@ -14,11 +14,11 @@ type App struct {
 }
 
 // ParseAppList calls the Veracode getapplist.do API and returns an array of Apps
-func ParseAppList(username, password string) ([]App, error) {
+func ParseAppList(credsFile string) ([]App, error) {
 	var apps []App
 	var errMsg error
 
-	appListAPI, err := appList(username, password)
+	appListAPI, err := appList(credsFile)
 	if err != nil {
 		log.Fatal(err)
 	}

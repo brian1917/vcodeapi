@@ -5,9 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/brian1917/vcodeHMAC"
 )
 
-func appList(username, password string) ([]byte, error) {
+func appList(credsFile string) ([]byte, error) {
 	var errorMsg error
 
 	client := http.Client{}
@@ -15,7 +17,8 @@ func appList(username, password string) ([]byte, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.SetBasicAuth(username, password)
+	req.Header.Set("Authorization", vcodeHMAC.GenerateAuthHeader(credsFile, req.Method, req.URL.String()))
+
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)

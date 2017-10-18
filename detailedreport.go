@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/brian1917/vcodeHMAC"
 )
 
-func detailedReport(username, password, buildID string) ([]byte, error) {
+func detailedReport(credsFile, buildID string) ([]byte, error) {
 	var errorMsg error
 
 	client := http.Client{}
@@ -15,7 +17,7 @@ func detailedReport(username, password, buildID string) ([]byte, error) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	req.SetBasicAuth(username, password)
+	req.Header.Set("Authorization", vcodeHMAC.GenerateAuthHeader(credsFile, req.Method, req.URL.String()))
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)

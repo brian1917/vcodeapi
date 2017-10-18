@@ -15,11 +15,11 @@ type Sandbox struct {
 }
 
 // ParseSandboxList parses the getsandboxlist.do API and returns an array of Sandboxes
-func ParseSandboxList(username, password, appID string) ([]Sandbox, error) {
+func ParseSandboxList(credsFile, appID string) ([]Sandbox, error) {
 	var sandboxes []Sandbox
 	var errMsg error
 
-	sandboxListAPI, err := sandboxList(username, password, appID)
+	sandboxListAPI, err := sandboxList(credsFile, appID)
 	if err != nil {
 		log.Fatal(err)
 	}
