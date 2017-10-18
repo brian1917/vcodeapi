@@ -3,7 +3,7 @@ package vcodeapi
 import (
 	"bytes"
 	"encoding/xml"
-	"errors"
+	"fmt"
 	"log"
 )
 
@@ -28,7 +28,8 @@ func ParseUpdateMitigation(credsFile, buildID, action, comment, flawList string)
 		case xml.StartElement:
 			// Read StartElement and check for flaw
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for UpdateMitigationInfo returned with an error element")
+				errMsg = fmt.Errorf("updatemitigationinfo.do error element returned when updating mitigation info for flaw IDs %v in build ID %v",
+					flawList, buildID)
 			}
 		}
 	}
