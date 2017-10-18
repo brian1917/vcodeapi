@@ -9,6 +9,14 @@ Go package that provides easy access to the Veracode APIs. Each API has two file
 For example, `detailedreport.go` calls the Veracode API and returns a `[byte]` and `detailedreportparser.go` parses the
 XML response and returns usable objects such as flaws.
 
+## Credentials File
+Must be structured like the following:
+```
+[DEFAULT]
+veracode_api_key_id = ID HERE
+veracode_api_key_secret = SECRET HERE
+```
+
 ## Included APIs
 1. Get App List (`/api/5.0/getapplist.do`)
 2. Get Build List (`/api/5.0/getbuildlist.do`)
