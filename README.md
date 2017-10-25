@@ -22,3 +22,4 @@ veracode_api_key_secret = SECRET HERE
 2. Get Build List (`/api/5.0/getbuildlist.do`)
 3. Get Sandbox List (`/api/5.0/getsandboxlist.do`)
 4. Get Detailed Report (`/api/5.0/detailedreport.do`)
+5. Get Team Info (`api/3.0/getteaminfo.do`)
