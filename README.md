@@ -5,7 +5,7 @@
 See here: https://godoc.org/github.com/brian1917/vcodeapi
 
 ## Description
-Go package that provides easy access to the Veracode APIs. Each API has two files: one for making the http request and one for parsing the response.
+Go package that provides easy access to the Veracode APIs. Each API typically has two files: one for making the http request and one for parsing the response.
 For example, `detailedreport.go` calls the Veracode API and returns a `[byte]` and `detailedreportparser.go` parses the
 XML response and returns usable objects such as flaws.
 
@@ -23,3 +23,4 @@ veracode_api_key_secret = SECRET HERE
 3. Get Sandbox List (`/api/5.0/getsandboxlist.do`)
 4. Get Detailed Report (`/api/5.0/detailedreport.do`)
 5. Get Team Info (`api/3.0/getteaminfo.do`)
+6. Updated Mitigation Info (`api/updatemitigationinfo.do`)
