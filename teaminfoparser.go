@@ -8,7 +8,6 @@ import (
 
 //TeamInfo represents the Team Information for a Veracode Team
 type TeamInfo struct {
-	Test     string `xml:"xmlns,attr"`
 	TeamName string `xml:"team_name,attr"`
 	Users    []User `xml:"user"`
 	Apps     []App  `xml:"application"`
