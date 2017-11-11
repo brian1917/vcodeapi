@@ -1,5 +1,6 @@
 # Veracode API Package
 [![GoDoc](https://godoc.org/github.com/brian1917/vcodeapi?status.svg)](https://godoc.org/github.com/brian1917/vcodeapi)
+[![Go Report Card](https://goreportcard.com/badge/github.com/brian1917/vcodeapi)](https://goreportcard.com/report/github.com/brian1917/vcodeapi)
 
 ## Package Documentation
 See here: https://godoc.org/github.com/brian1917/vcodeapi
