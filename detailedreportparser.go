@@ -70,7 +70,7 @@ type CustomField struct {
 	Value string `xml:"value,attr"`
 }
 
-// ParseDetailedReport parses the detailedreport.do API and returns an array of Flaws
+// ParseDetailedReport parses the detailedreport.do API and returns an array of Flaws and Custom Fields.
 func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, error) {
 	var flaws []Flaw
 	var customFields []CustomField
