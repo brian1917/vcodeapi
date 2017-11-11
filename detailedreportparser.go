@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
-	"log"
 )
 
 type detReport struct {
@@ -75,15 +74,18 @@ type CustomField struct {
 func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, error) {
 	var flaws []Flaw
 	var customFields []CustomField
-	var errMsg error
 	var detRep detReport
 
 	detailedReportAPI, err := detailedReport(credsFile, buildID)
 	if err != nil {
-		log.Fatal(err)
+		return nil, nil, err
 	}
 
-	// Two decoders sucks. We are decoding the entire document in decoder1 and just not using it. Circle back to this.
+	/**
+	Two decoders isn't ideal, but we are avoiding putting entire document into structs.
+	We are decoding the entire document in decoder1 to get metadeta around the build.
+	We decode flaws and custom fields in decoder 2.
+	**/
 
 	//decoder1 gets information on the app
 	decoder1 := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
@@ -117,7 +119,7 @@ func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, erro
 		case xml.StartElement:
 			// Read StartElement and check for errors, flaws, and custom field
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for GetDetailedReport returned with an error element")
+				return nil, nil, errors.New("api for GetDetailedReport returned with an error element")
 			}
 			if se.Name.Local == "flaw" {
 				var flaw Flaw
@@ -133,6 +135,6 @@ func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, erro
 			}
 		}
 	}
-	return flaws, customFields, errMsg
+	return flaws, customFields, nil
 
 }

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
-	"log"
 )
 
 // A Build represents a Veracode Build within an application.
@@ -17,11 +16,10 @@ type Build struct {
 // ParseBuildList calls the Veracode getbuildlist.do API and returns an array of Builds
 func ParseBuildList(credsFile, appID string) ([]Build, error) {
 	var builds []Build
-	var errMsg error
 
 	buildListAPI, err := buildList(credsFile, appID)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(buildListAPI))
 	for {
@@ -41,9 +39,9 @@ func ParseBuildList(credsFile, appID string) ([]Build, error) {
 				builds = append(builds, build)
 			}
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for GetBuildList returned with an error element")
+				return nil, errors.New("api for GetBuildList returned with an error element")
 			}
 		}
 	}
-	return builds, errMsg
+	return builds, nil
 }

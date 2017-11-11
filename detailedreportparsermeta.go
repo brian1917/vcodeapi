@@ -17,8 +17,8 @@ type DetReportMeta struct {
 	BusinessUnit           string `xml:"business_unit,attr"`
 }
 
-// ParseDetailedReportMeta parses the detailedreport.do API and returns an array of Flaws
-func ParseDetailedReportMeta(credsFile, buildID string) (DetReportMeta, error) {
+// ParseBuildMetaData parses the detailedreport.do API and returns an array of Flaws
+func ParseBuildMetaData(credsFile, buildID string) (DetReportMeta, error) {
 	var errMsg error
 	var detReportMeta DetReportMeta
 

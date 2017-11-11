@@ -4,16 +4,14 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"log"
 )
 
 // ParseUpdateMitigation process an update mitigation request and returns an error if applicable
 func ParseUpdateMitigation(credsFile, buildID, action, comment, flawList string) error {
-	var errMsg error
 
 	updateMitigationAPI, err := updateMitigationInfo(credsFile, buildID, action, comment, flawList)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(updateMitigationAPI))
 	for {
@@ -28,10 +26,10 @@ func ParseUpdateMitigation(credsFile, buildID, action, comment, flawList string)
 		case xml.StartElement:
 			// Read StartElement and check for flaw
 			if se.Name.Local == "error" {
-				errMsg = fmt.Errorf("updatemitigationinfo.do error element returned when updating mitigation info for flaw IDs %v in build ID %v",
+				return fmt.Errorf("updatemitigationinfo.do error element returned when updating mitigation info for flaw IDs %v in build ID %v",
 					flawList, buildID)
 			}
 		}
 	}
-	return errMsg
+	return nil
 }

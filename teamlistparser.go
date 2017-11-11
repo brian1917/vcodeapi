@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
-	"log"
 )
 
 //Team represents a Veracode team of users
@@ -16,12 +15,11 @@ type Team struct {
 
 //ParseTeamList calls the getteamlist.do API and returns an array of teams
 func ParseTeamList(credsFile string) ([]Team, error) {
-	var errMsg error
 	var teams []Team
 
 	teamListAPI, err := teamList(credsFile)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	decoder := xml.NewDecoder(bytes.NewReader(teamListAPI))
@@ -42,9 +40,9 @@ func ParseTeamList(credsFile string) ([]Team, error) {
 				teams = append(teams, team)
 			}
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for GetTeamList returned with an error element")
+				return nil, errors.New("api for GetTeamList returned with an error element")
 			}
 		}
 	}
-	return teams, errMsg
+	return teams, nil
 }

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
-	"log"
 )
 
 // App represents a Veracode Application Profile
@@ -16,11 +15,10 @@ type App struct {
 // ParseAppList calls the Veracode getapplist.do API and returns an array of Apps
 func ParseAppList(credsFile string) ([]App, error) {
 	var apps []App
-	var errMsg error
 
 	appListAPI, err := appList(credsFile)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(appListAPI))
 	for {
@@ -40,9 +38,9 @@ func ParseAppList(credsFile string) ([]App, error) {
 				apps = append(apps, app)
 			}
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for GetAppList returned with an error element")
+				return nil, errors.New("api for GetAppList returned with an error element")
 			}
 		}
 	}
-	return apps, errMsg
+	return apps, nil
 }

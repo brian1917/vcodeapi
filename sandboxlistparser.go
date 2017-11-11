@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
-	"log"
 )
 
 // Sandbox is a an individual sandbox with an application profile
@@ -17,11 +16,10 @@ type Sandbox struct {
 // ParseSandboxList parses the getsandboxlist.do API and returns an array of Sandboxes
 func ParseSandboxList(credsFile, appID string) ([]Sandbox, error) {
 	var sandboxes []Sandbox
-	var errMsg error
 
 	sandboxListAPI, err := sandboxList(credsFile, appID)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	decoder := xml.NewDecoder(bytes.NewReader(sandboxListAPI))
 	for {
@@ -41,9 +39,9 @@ func ParseSandboxList(credsFile, appID string) ([]Sandbox, error) {
 				sandboxes = append(sandboxes, sandbox)
 			}
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for GetSandboxList returned with an error element")
+				return nil, errors.New("api for GetSandboxList returned with an error element")
 			}
 		}
 	}
-	return sandboxes, errMsg
+	return sandboxes, nil
 }

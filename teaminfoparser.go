@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
-	"log"
 )
 
 //TeamInfo represents the Team Information for a Veracode Team
@@ -27,12 +26,11 @@ type User struct {
 
 // ParseTeamInfo calls the Veracode getteaminfo.do API and returns a TeamInfo struct
 func ParseTeamInfo(credsFile, teamID string, includeUsers, includeApplications bool) (TeamInfo, error) {
-	var errMsg error
 	var team TeamInfo
 
 	teamInfoAPI, err := teamInfo(credsFile, teamID, includeUsers, includeApplications)
 	if err != nil {
-		log.Fatal(err)
+		return team, err
 	}
 
 	decoder := xml.NewDecoder(bytes.NewReader(teamInfoAPI))
@@ -51,9 +49,9 @@ func ParseTeamInfo(credsFile, teamID string, includeUsers, includeApplications b
 				decoder.DecodeElement(&team, &se)
 			}
 			if se.Name.Local == "error" {
-				errMsg = errors.New("api for GetTeamInfo returned with an error element")
+				return team, errors.New("api for GetTeamInfo returned with an error element")
 			}
 		}
 	}
-	return team, errMsg
+	return team, nil
 }
