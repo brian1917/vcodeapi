@@ -25,3 +25,6 @@ veracode_api_key_secret = SECRET HERE
 4. Get Detailed Report (`/api/5.0/detailedreport.do`)
 5. Get Team Info (`api/3.0/getteaminfo.do`)
 6. Updated Mitigation Info (`api/updatemitigationinfo.do`)
+7. Upload File (`api/5.0/uploadfile.do`)
+8. Begin Prescan (`api/5.0/beginprescan.do`)
+
