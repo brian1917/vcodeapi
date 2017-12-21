@@ -6,14 +6,76 @@ import (
 	"errors"
 )
 
-type detReport struct {
-	AppName                string `xml:"app_name,attr"`
-	AppID                  string `xml:"app_id,attr"`
-	PolicyName             string `xml:"policy_name,attr"`
-	PolicyComplianceStatus string `xml:"policy_compliance_status,attr"`
-	PolicyRulesStatus      string `xml:"policy_rules_status,attr"`
-	GracePeriodExpired     string `xml:"grace_period_expired,attr"`
-	BusinessUnit           string `xml:"business_unit,attr"`
+// DetReport represents the detailed report returned for a build
+type DetReport struct {
+	AppName                string          `xml:"app_name,attr"`
+	AppID                  string          `xml:"app_id,attr"`
+	PolicyName             string          `xml:"policy_name,attr"`
+	PolicyComplianceStatus string          `xml:"policy_compliance_status,attr"`
+	PolicyRulesStatus      string          `xml:"policy_rules_status,attr"`
+	GracePeriodExpired     string          `xml:"grace_period_expired,attr"`
+	BusinessUnit           string          `xml:"business_unit,attr"`
+	StaticAnalysis         StaticAnalysis  `xml:"static-analysis"`
+	DynamicAnalysis        DynamicAnalysis `xml:"dynamic-analysis"`
+	ManualAnalysis         ManualAnalysis  `xml:"manual-analysis"`
+}
+
+// StaticAnalysis represents a static scan from Veracode
+type StaticAnalysis struct {
+	AnalysisSize  string  `xml:"analysis_size_bytes,attr"`
+	EngineVersion string  `xml:"engine_version,attr"`
+	PublishedDate string  `xml:"published_date,attr"`
+	Rating        string  `xml:"rating,attr"`
+	Score         string  `xml:"score,attr"`
+	SubmittedDate string  `xml:"submitted_date,attr"`
+	Version       string  `xml:"version,attr"`
+	Modules       Modules `xml:"modules"`
+}
+
+// Modules is an array of module
+type Modules struct {
+	Module []Module `xml:"module"`
+}
+
+// Module represents a scannable module in Veracode
+type Module struct {
+	Architecture string `xml:"architecture,attr"`
+	Compiler     string `xml:"compiler,attr"`
+	Domain       string `xml:"domain,attr"`
+	Loc          string `xml:"loc,attr"`
+	Name         string `xml:"name,attr"`
+	Numflawssev0 string `xml:"numflawssev0,attr"`
+	Numflawssev1 string `xml:"numflawssev1,attr"`
+	Numflawssev2 string `xml:"numflawssev2,attr"`
+	Numflawssev3 string `xml:"numflawssev3,attr"`
+	Numflawssev4 string `xml:"numflawssev4,attr"`
+	Numflawssev5 string `xml:"numflawssev5,attr"`
+	Os           string `xml:"os,attr"`
+	Score        string `xml:"score,attr"`
+	TargetURL    string `xml:"target_url,attr"`
+}
+
+// DynamicAnalysis represents a dynamic scan from Veracode
+type DynamicAnalysis struct {
+	DynamicScanType    string  `xml:"dynamic_scan_type,attr"`
+	PublishedDate      string  `xml:"published_date,attr"`
+	Rating             string  `xml:"rating,attr"`
+	ScanExitStatusDesc string  `xml:"scan_exit_status_desc,attr"`
+	ScanExitStatusID   string  `xml:"scan_exit_status_id,attr"`
+	Score              string  `xml:"score,attr"`
+	SubmittedDate      string  `xml:"submitted_date,attr"`
+	Version            string  `xml:"version,attr"`
+	Modules            Modules `xml:"modules"`
+}
+
+// ManualAnalysis represents a manual assessment from Veracode
+type ManualAnalysis struct {
+	PublishedDate string  `xml:"published_date,attr"`
+	Rating        string  `xml:"rating,attr"`
+	Score         string  `xml:"score,attr"`
+	SubmittedDate string  `xml:"submitted_date,attr"`
+	Version       string  `xml:"version,attr"`
+	Modules       Modules `xml:"modules"`
 }
 
 // Flaw represents a finding from a Veracode test (static, dynamic, or MPT)
@@ -34,6 +96,8 @@ type Flaw struct {
 	Sourcefile              string      `xml:"sourcefile,attr"`
 	Line                    string      `xml:"line,attr"`
 	Description             string      `xml:"description,attr"`
+	FlawURL                 string      `xml:"url,attr"`
+	VulnParameter           string      `xml:"vuln_parameter,attr"`
 	Mitigations             Mitigations `xml:"mitigations"`
 	Annotations             Annotations `xml:"annotations"`
 }
@@ -70,15 +134,15 @@ type CustomField struct {
 	Value string `xml:"value,attr"`
 }
 
-// ParseDetailedReport parses the detailedreport.do API and returns an array of Flaws and Custom Fields.
-func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, error) {
+// ParseDetailedReport parses the detailedreport.do API and returns an DetailedReport struct, an array of Flaws, and an array of Custom Fields.
+func ParseDetailedReport(credsFile, buildID string) (DetReport, []Flaw, []CustomField, error) {
 	var flaws []Flaw
 	var customFields []CustomField
-	var detRep detReport
+	var detRep DetReport
 
 	detailedReportAPI, err := detailedReport(credsFile, buildID)
 	if err != nil {
-		return nil, nil, err
+		return detRep, nil, nil, err
 	}
 
 	/**
@@ -87,11 +151,11 @@ func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, erro
 	We decode flaws and custom fields in decoder 2.
 	**/
 
-	//decoder1 gets information on the app
-	decoder1 := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
+	//Create the detailed report object
+	detailedReportDecoder := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
 	for {
 		// Read tokens from the XML document in a stream.
-		t, _ := decoder1.Token()
+		t, _ := detailedReportDecoder.Token()
 
 		if t == nil {
 			break
@@ -100,16 +164,16 @@ func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, erro
 		switch se := t.(type) {
 		case xml.StartElement:
 			if se.Name.Local == "detailedreport" {
-				decoder1.DecodeElement(&detRep, &se)
+				detailedReportDecoder.DecodeElement(&detRep, &se)
 			}
 		}
 	}
 
-	//decoder 2 gets information on flaws and custom fields.
-	decoder2 := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
+	//Create arrays of flaws and custom fields
+	flawAndCustomDecoder := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
 	for {
 		// Read tokens from the XML document in a stream.
-		t, _ := decoder2.Token()
+		t, _ := flawAndCustomDecoder.Token()
 
 		if t == nil {
 			break
@@ -119,22 +183,22 @@ func ParseDetailedReport(credsFile, buildID string) ([]Flaw, []CustomField, erro
 		case xml.StartElement:
 			// Read StartElement and check for errors, flaws, and custom field
 			if se.Name.Local == "error" {
-				return nil, nil, errors.New("api for GetDetailedReport returned with an error element")
+				return detRep, nil, nil, errors.New("api for GetDetailedReport returned with an error element")
 			}
 			if se.Name.Local == "flaw" {
 				var flaw Flaw
-				decoder2.DecodeElement(&flaw, &se)
+				flawAndCustomDecoder.DecodeElement(&flaw, &se)
 				flaw.CategoryName = categoryMap[flaw.CategoryID]
 				flaw.PolicyName = detRep.PolicyName
 				flaws = append(flaws, flaw)
 			}
 			if se.Name.Local == "customfield" {
 				var cField CustomField
-				decoder2.DecodeElement(&cField, &se)
+				flawAndCustomDecoder.DecodeElement(&cField, &se)
 				customFields = append(customFields, cField)
 			}
 		}
 	}
-	return flaws, customFields, nil
+	return detRep, flaws, customFields, nil
 
 }
