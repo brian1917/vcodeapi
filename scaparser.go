@@ -11,6 +11,8 @@ type SoftwareCompositionAnalysis struct {
 	ThirdPartyComponents     string      `xml:"third_party_components,attr"`
 	ViolatePolicy            string      `xml:"violate_policy,attr"`
 	VulnerableComponents     []Component `xml:"vulnerable_components"`
+	PublishedDate            string
+	AppName                  string
 }
 
 // Component is a third-party library identifed by SCA
@@ -87,10 +89,29 @@ type PolicyRule struct {
 func ParseSCAReport(credsFile, buildID string) (SoftwareCompositionAnalysis, error) {
 
 	var SCA SoftwareCompositionAnalysis
+	var detRep DetReport
 
 	detailedReportAPI, err := detailedReport(credsFile, buildID)
 	if err != nil {
 		return SCA, err
+	}
+
+	//Create the detailed report object
+	detailedReportDecoder := xml.NewDecoder(bytes.NewReader(detailedReportAPI))
+	for {
+		// Read tokens from the XML document in a stream.
+		t, _ := detailedReportDecoder.Token()
+
+		if t == nil {
+			break
+		}
+		// Inspect the type of the token just read
+		switch se := t.(type) {
+		case xml.StartElement:
+			if se.Name.Local == "detailedreport" {
+				detailedReportDecoder.DecodeElement(&detRep, &se)
+			}
+		}
 	}
 
 	//Create the SCA object
@@ -110,6 +131,10 @@ func ParseSCAReport(credsFile, buildID string) (SoftwareCompositionAnalysis, err
 			}
 		}
 	}
+
+	// Add info from detailed report to SCA object
+	SCA.PublishedDate = detRep.StaticAnalysis.PublishedDate
+	SCA.AppName = detRep.AppName
 
 	return SCA, nil
 
