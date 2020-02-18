@@ -93,6 +93,7 @@ type Flaw struct {
 	Severity                string      `xml:"severity,attr"`
 	ExploitLevel            string      `xml:"exploitLevel,attr"`
 	Module                  string      `xml:"module,attr"`
+	SourcefilePath          string      `xml:"sourcefilepath,attr"`
 	Sourcefile              string      `xml:"sourcefile,attr"`
 	Line                    string      `xml:"line,attr"`
 	Description             string      `xml:"description,attr"`
